@@ -1,0 +1,15 @@
+{
+  "name": "rollup-federation-demo",
+  "private": true,
+  "workspaces": [
+    "rollup-host",
+    "rollup-remote",
+    "webpack-host"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build"
+  },
+  "repository": "git@github.com:flyfishzy/rollup-federation-demo.git",
+  "author": "joey <flyfish.zy@gmail.com>",
+  "license": "MIT"
+}
