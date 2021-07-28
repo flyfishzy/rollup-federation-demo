@@ -4,8 +4,8 @@
   "scripts": {
     "start": "webpack-cli serve",
     "serve": "http-server ./dist -p 3001 --cors='*'",
-    "build": "webpack --mode production",
-    "clean": "rm -rf dist"
+    "prebuild": "rimraf dist",
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "@babel/core": "^7.11.0",

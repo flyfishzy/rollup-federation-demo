@@ -1,19 +1,11 @@
-const path = require('path');
-
 const remoteEntryHelperId = 'rollup-plugin-federation/remoteEntry';
 const moduleMapMarker = '__ROLLUP_FEDERATION_MODULE_MAP__';
 
-function moduleMap(exposes, rawFile, distFile) {
-    for (let key in exposes) {
-        const exposeFile = path.resolve(exposes[key]);
-        if (rawFile.indexOf(exposeFile) === 0) {
-            return `"${key}": () => {  return import('http://localhost:8081/${distFile}').then(({ default: apply }) => (()=> (apply())))},\n`
-        }
-    }
-    return '';
-}
-const code =
-    `${moduleMapMarker}
+export default function federation(options) {
+    const provideExposes = options.exposes || {};
+    const exposeId = new Map();
+    const code =
+        `${moduleMapMarker}
 export const get =(module, getScope) => {
     return moduleMap[module]();
 };
@@ -21,15 +13,27 @@ export const init =(shareScope, initScope) => {
     console.log('init')
 };`
 
-export default function federation(options) {
     return {
         name: 'federation',
+
+        options(_options) {
+            // Split expose & shared module to separate chunks
+            const manualChunks = _options.output[0].manualChunks || {};
+            Object.keys(provideExposes).forEach((id) => {
+                const newId = id.replace(/[^a-zA-Z0-9]/g, '');
+                exposeId.set(newId, id);
+                manualChunks[newId] = [provideExposes[id]];
+            });
+            _options.output[0].manualChunks = manualChunks;
+            return _options;
+        },
 
         buildStart(_options) {
             this.emitFile({
                 fileName: options.filename,
                 type: 'chunk',
-                id: remoteEntryHelperId
+                id: remoteEntryHelperId,
+                preserveSignature:"strict"
             })
         },
 
@@ -54,8 +58,8 @@ export default function federation(options) {
             let remoteEntry;
             for (const file in bundle) {
                 const chunk = bundle[file];
-                if (chunk.type === 'chunk') {
-                    modules += moduleMap(options.exposes, chunk.facadeModuleId, chunk.fileName);
+                if (chunk.type === 'chunk' && exposeId.has(chunk.name)) {
+                    modules += `"${exposeId.get(chunk.name)}": () => {  return import('http://localhost:8081/${chunk.fileName}').then(({ default: apply }) => (()=> (apply())))},\n`
                 }
                 if (chunk.fileName === options.filename) {
                     remoteEntry = chunk;

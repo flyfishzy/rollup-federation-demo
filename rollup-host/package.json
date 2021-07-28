@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "run-p watch serve",
+    "prebuild": "rimraf dist",
     "build": "rollup -c",
     "serve": "http-server . -p 8080 --cors='*'",
-    "watch": "rollup -c -w",
-    "clean": "rm -rf dist"
+    "watch": "rollup -c -w"
   },
   "devDependencies": {
     "@module-federation/rollup-federation": "0.0.1",

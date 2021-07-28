@@ -11,5 +11,8 @@
   },
   "repository": "git@github.com:flyfishzy/rollup-federation-demo.git",
   "author": "joey <flyfish.zy@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }

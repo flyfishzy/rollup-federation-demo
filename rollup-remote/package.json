@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "run-p watch serve",
+    "prebuild": "rimraf dist",
     "build": "rollup -c",
     "serve": "http-server ./dist -p 8081 --cors='*'",
-    "watch": "rollup -c -w",
-    "clean": "rm -rf dist"
+    "watch": "rollup -c -w"
   },
   "devDependencies": {
     "npm-run-all": "4.1.5",

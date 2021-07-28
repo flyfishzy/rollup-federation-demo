@@ -13,5 +13,9 @@ export default {
       }
     }),
   ],
-  output: [{ format: "esm", dir: pkg.main }],
+  output: {
+    exports: "auto",
+    format: "esm",
+    dir: pkg.main
+  },
 };
