@@ -6,7 +6,7 @@
   "scripts": {
     "start": "run-p watch serve",
     "build": "rollup -c",
-    "serve": "http-server . -p 8083 --cors='*'",
+    "serve": "http-server . -p 8080 --cors='*'",
     "watch": "rollup -c -w",
     "clean": "rm -rf dist"
   },
