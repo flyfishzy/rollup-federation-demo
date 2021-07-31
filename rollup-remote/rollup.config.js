@@ -4,7 +4,6 @@ import pkg from "./package.json";
 
 export default {
   input: "src/index.js",
-  preserveEntrySignatures: false,
   plugins: [
     federation({
       filename: "remoteEntry.js",
@@ -14,7 +13,6 @@ export default {
     }),
   ],
   output: {
-    exports: "auto",
     format: "esm",
     dir: pkg.main
   },
